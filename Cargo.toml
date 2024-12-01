@@ -3,5 +3,14 @@ name = "aoc2024"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+default = ["regression"]
+# Enables regression tests using inputs/DD.txt.
+# This only works for me (since anyone else looking at the repo doesn't have
+# my set of puzzle inputs), so it's feature flagged so you can at least run
+# the example test cases.
+regression = []
+
 [dependencies]
 clap = { version = "4.5.21", features = ["derive"] }
+thiserror = "2.0.3"

@@ -1,6 +1,8 @@
 use std::{collections::BTreeMap, error::Error};
 
-pub(crate) fn day_01(input: &str, part: bool) -> Result<String, Box<dyn Error>> {
+use crate::common::Part;
+
+pub(crate) fn day_01(input: &str, part: Part) -> Result<String, Box<dyn Error>> {
     let mut left: Vec<u32> = Vec::new();
     let mut right: Vec<u32> = Vec::new();
 
@@ -10,27 +12,30 @@ pub(crate) fn day_01(input: &str, part: bool) -> Result<String, Box<dyn Error>> 
         right.push(split.next().unwrap().parse()?);
     }
 
-    if part {
-        let mut frequency: BTreeMap<u32, u32> = BTreeMap::new();
-        for entry in &right {
-            *frequency.entry(*entry).or_default() += 1;
+    match part {
+        Part::PartOne => {
+            left.sort();
+            right.sort();
+
+            Ok(left
+                .iter()
+                .zip(right.iter())
+                .map(|(l, r)| l.abs_diff(*r))
+                .sum::<u32>()
+                .to_string())
         }
+        Part::PartTwo => {
+            let mut frequency: BTreeMap<u32, u32> = BTreeMap::new();
+            for entry in &right {
+                *frequency.entry(*entry).or_default() += 1;
+            }
 
-        Ok(left
-            .iter()
-            .map(|l| l * frequency.get(l).copied().unwrap_or_default())
-            .sum::<u32>()
-            .to_string())
-    } else {
-        left.sort();
-        right.sort();
-
-        Ok(left
-            .iter()
-            .zip(right.iter())
-            .map(|(l, r)| l.abs_diff(*r))
-            .sum::<u32>()
-            .to_string())
+            Ok(left
+                .iter()
+                .map(|l| l * frequency.get(l).copied().unwrap_or_default())
+                .sum::<u32>()
+                .to_string())
+        }
     }
 }
 
@@ -47,18 +52,19 @@ mod tests {
 
     #[test]
     fn example_input() {
-        assert_eq!(&day_01(EXAMPLE_INPUT, false).unwrap(), "11");
-        assert_eq!(&day_01(EXAMPLE_INPUT, true).unwrap(), "31");
+        assert_eq!(&day_01(EXAMPLE_INPUT, Part::PartOne).unwrap(), "11");
+        assert_eq!(&day_01(EXAMPLE_INPUT, Part::PartTwo).unwrap(), "31");
     }
 
+    #[cfg(feature = "regression")]
     #[test]
     fn regression() {
         assert_eq!(
-            &day_01(include_str!("../inputs/01.txt"), false).unwrap(),
+            &day_01(include_str!("../inputs/01.txt"), Part::PartOne).unwrap(),
             "1603498"
         );
         assert_eq!(
-            &day_01(include_str!("../inputs/01.txt"), true).unwrap(),
+            &day_01(include_str!("../inputs/01.txt"), Part::PartTwo).unwrap(),
             "25574739"
         );
     }
