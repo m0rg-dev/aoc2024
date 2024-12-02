@@ -29,14 +29,14 @@ impl FromStr for Part {
 }
 
 impl Part {
-    pub fn choose<F, G>(&self, part_one: F, part_two: G) -> Box<DaySolver>
+    pub fn choose<F, G, A, R>(&self, part_one: F, part_two: G, args: A) -> R
     where
-        F: Fn(&str) -> Result<String, Box<dyn Error>> + 'static,
-        G: Fn(&str) -> Result<String, Box<dyn Error>> + 'static,
+        F: FnOnce(A) -> R,
+        G: FnOnce(A) -> R,
     {
-        Box::new(move |input: &str, part: Part| match part {
-            Part::PartOne => part_one(input),
-            Part::PartTwo => part_two(input),
-        })
+        match self {
+            Part::PartOne => part_one(args),
+            Part::PartTwo => part_two(args),
+        }
     }
 }
