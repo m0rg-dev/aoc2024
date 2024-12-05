@@ -6,12 +6,14 @@ use day01::day_01;
 use day02::day_02;
 use day03::day_03;
 use day04::day_04;
+use day05::day_05;
 
 mod common;
 mod day01;
 mod day02;
 mod day03;
 mod day04;
+mod day05;
 
 #[derive(Parser)]
 struct Args {
@@ -26,6 +28,7 @@ fn main() {
         Box::new(day_02),
         Box::new(day_03),
         Box::new(day_04),
+        Box::new(day_05),
     ];
 
     let args = Args::parse();
