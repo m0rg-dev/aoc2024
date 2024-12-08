@@ -4,7 +4,7 @@ use thiserror::Error;
 
 pub(crate) type DaySolver = dyn Fn(&str, Part) -> Result<String, Box<dyn Error>>;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Part {
     PartOne,
     PartTwo,
